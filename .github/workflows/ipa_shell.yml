@@ -1,0 +1,64 @@
+# vim: expandtab tabstop=2 shiftwidth=2
+name: IPA Download Shell
+
+env:
+  PYTHONIOENCODING: utf-8
+
+on: 
+  workflow_dispatch:
+    inputs:
+      appleId:
+        description: 'Apple ID Account'
+        required: true
+      appleIdPwd:
+        description: 'Apple ID Password'
+        required: true
+      itunes_debug_enabled:
+        description: 'Run the build with ngrok debugging enabled'
+        required: false
+        default: false
+
+jobs:
+  ipadown_shell:
+    name: 'IPA Download Shell'
+    runs-on: "windows-latest"
+    steps:
+      - name: Masking inputs
+        run: |
+          SECRET_VALUE=$(cat $GITHUB_EVENT_PATH | jq -r '.inputs.appleId' )
+          echo "::add-mask::$SECRET_VALUE"
+          SECRET_VALUE=$(cat $GITHUB_EVENT_PATH | jq -r '.inputs.appleIdPwd' )
+          echo "::add-mask::$SECRET_VALUE"
+        shell: bash
+
+      - name: Set up git repository
+        uses: actions/checkout@v2
+      
+      - name: Setup ipatool-py
+        run: |
+          git clone https://github.com/NyaMisty/ipatool-py
+          mkdir -p ipaDown
+        shell: bash
+
+      - name: Setup iTunes Header Service
+        uses: NyaMisty/actions-iTunes-header@master
+        with:
+          apple_id: ${{ github.event.inputs.appleId }}
+          apple_id_pwd: ${{ github.event.inputs.appleIdPwd }}
+          ngrok_token: ${{ secrets.NGROK_AUTH_TOKEN }}
+      
+      - uses: NyaMisty/reverse-rdp-windows-github-actions-ng@master
+        if: ${{ always() && github.event_name == 'workflow_dispatch' && github.event.inputs.itunes_debug_enabled }}
+        with:
+          ngrok-token: ${{ secrets.NGROK_AUTH_TOKEN }}
+          password: Aa123456
+          foreground: false
+      
+      # Enable tmate debugging of manually-triggered workflows if the input option was provided
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+      
+      - name: "Upload package"
+        uses: NyaMisty/upload-artifact-as-is@master
+        with:
+          path: ipaDown\*
