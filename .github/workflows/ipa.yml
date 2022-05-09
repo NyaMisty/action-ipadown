@@ -81,7 +81,11 @@ jobs:
           # available operations: lookup, historyver, download, historyver_id, download_id
           op=${{ github.event.inputs.operation }}
           if [[ "$op" == "lookup" ]]; then
-            python3 ipatool-py/main.py --json lookup -b ${{ github.event.inputs.appBundleId }} -c ${{ github.event.inputs.appCountry }}
+            if [[ "${{ github.event.inputs.appBundleId }}" != "" ]]; then
+              python3 ipatool-py/main.py --json lookup --get-verid -b ${{ github.event.inputs.appBundleId }} -c ${{ github.event.inputs.appCountry }}
+            else
+              python3 ipatool-py/main.py --json lookup --get-verid -i ${{ github.event.inputs.appId }} -c ${{ github.event.inputs.appCountry }}
+            fi
           elif [[ "$op" == historyver* ]]; then
             if [[ "$op" == "historyver" ]]; then
               python3 ipatool-py/main.py --json lookup -b ${{ github.event.inputs.appBundleId }} -c ${{ github.event.inputs.appCountry }} \
