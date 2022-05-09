@@ -4,6 +4,9 @@ name: IPA Download Shell
 env:
   PYTHONIOENCODING: utf-8
 
+# Allow Release
+permissions: write-all
+
 on: 
   workflow_dispatch:
     inputs:
