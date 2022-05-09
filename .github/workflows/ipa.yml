@@ -95,10 +95,11 @@ jobs:
 
             if [[ "$op" == "download" ]]; then
               output=$(python3 ipatool-py/main.py --json lookup -b ${{ github.event.inputs.appBundleId }} -c ${{ github.event.inputs.appCountry }} \
-                                                download -s http://127.0.0.1:9000 $appVerCmd)
+                                                download -o ipaDown -s http://127.0.0.1:9000 $appVerCmd)
             elif [[ "$op" == "download_id" ]]; then
-              output=python3 ipatool-py/main.py --json download -s http://127.0.0.1:9000 --appId ${{ github.event.inputs.id }} $appVerCmd
+              output=$(python3 ipatool-py/main.py --json download -o ipaDown -s http://127.0.0.1:9000 --appId ${{ github.event.inputs.id }} $appVerCmd)
             fi
+            echo "Got Downloading JSON result: $output"
             echo "::set-output name=needIPARelease::1"
             echo "::set-output name=appName::$(echo "$output" | jq -r '.appName')"
             echo "::set-output name=appBundleId::$(echo "$output" | jq -r '.appBundleId')"
@@ -116,10 +117,10 @@ jobs:
           path: ipaDown\*
 
       - name: Split ipa
-        if: ${{ steps.operation.outputs.needIPARelease == 1 }}
+        if: ${{ steps.operation.outputs.needIPARelease == '1' }}
         run: |
           mkdir -p ipaDown_split
-          (cd ipaDown; find . -name "*.ipa" -size +1879048192B -exec split --bytes=1879048192 --suffix-length=3 --numeric-suffix {} ../ipaDown_split/{}. \;)
+          (cd ipaDown; find . -name "*.ipa" -size +1879048192b -exec split --bytes=1879048192 --suffix-length=3 --numeric-suffix {} ../ipaDown_split/{}. \;)
         shell: bash
       
       - name: Pushing to release
