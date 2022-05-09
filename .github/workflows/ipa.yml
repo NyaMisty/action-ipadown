@@ -142,5 +142,8 @@ jobs:
                 ) }}
           commit: ${{ github.sha }}
           tag: "${{ steps.operation.outputs.appBundleId }}-${{ steps.operation.outputs.appId }}-${{ steps.operation.outputs.appVerId }}"
-          artifacts: ${{ runner.temp }}\ipaDown_split\*
-          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: ipaDown_split\*
+
+          allowUpdates: true
+          removeArtifacts: true
+          replacesArtifacts: true
