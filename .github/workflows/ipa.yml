@@ -133,7 +133,7 @@ jobs:
         with:
           name: "IPADown: ${{ steps.operation.outputs.appName }} - ${{ steps.operation.outputs.appVer }}"
           body: >-
-            ${{ format('appName: {0}\nappBundleId: {1}\nappVer: {2}\nappId: {3}\nappVerId: {4}\n', 
+            ${{ format(fromJSON('"appName: {0}\nappBundleId: {1}\nappVer: {2}\nappId: {3}\nappVerId: {4}\n"'), 
                   steps.operation.outputs.appName, 
                   steps.operation.outputs.appBundleId, 
                   steps.operation.outputs.appVer, 
