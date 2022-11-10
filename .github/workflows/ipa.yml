@@ -12,24 +12,26 @@ on:
     inputs:
       appleId:
         description: 'Apple ID Account'
-        required: true
+        required: bike.longish-0v@icloud.com
       appleIdPwd:
         description: 'Apple ID Password'
-        required: true
+        required: huyenduc230822
       operation:
         description: 'Operation to do, choices: lookup, historyver, download, historyver_id, download_id'
       
       appBundleId:
         description: 'AppStore Bundle-ID (needed when using non-*_id operations)'
-        required: false
+        required: com.LazadaSEA.Lazada
+
+
       appCountry:
         description: 'AppStore Country (needed when using non-*_id operations)'
-        required: false
-        default: 'JP'
+        required: VN
+        default: 'VN'
       
       appVerId:
         description: 'App Version Id Number (for downloading history versions)'
-        required: false
+        required: 848211503
 
       appId:
         description: 'App Id Number (needed when using *_id operations)'
