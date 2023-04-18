@@ -50,12 +50,12 @@ jobs:
           apple_id_pwd: ${{ github.event.inputs.appleIdPwd }}
           ngrok_token: ${{ secrets.NGROK_AUTH_TOKEN }}
       
-      - uses: NyaMisty/reverse-rdp-windows-github-actions-ng@master
-        if: ${{ always() && github.event_name == 'workflow_dispatch' && github.event.inputs.itunes_debug_enabled }}
-        with:
-          ngrok-token: ${{ secrets.NGROK_AUTH_TOKEN }}
-          password: Aa123456
-          foreground: false
+      #- uses: NyaMisty/reverse-rdp-windows-github-actions-ng@master
+      #  if: ${{ always() && github.event_name == 'workflow_dispatch' && github.event.inputs.itunes_debug_enabled }}
+      #  with:
+      #    ngrok-token: ${{ secrets.NGROK_AUTH_TOKEN }}
+      #    password: Aa123456
+      #    foreground: false
       
       # Enable tmate debugging of manually-triggered workflows if the input option was provided
       - name: Setup tmate session
